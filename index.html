@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knockout.js MVVM - ToDo List</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Knockout.js via CDN -->
+    <script src="https://unpkg.com/knockout@3.5.1/build/output/knockout-latest.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 ToDo List com Knockout.js</h1>
+            <p class="subtitle">Demonstração do padrão MVVM</p>
+        </header>
+
+        <main>
+            <!-- Seção de Adicionar Tarefa -->
+            <section class="add-task-section">
+                <h2>Adicionar Nova Tarefa</h2>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="newTaskInput"
+                        placeholder="Digite sua tarefa aqui..."
+                        data-bind="value: newTaskText, event: { keyup: addTaskOnEnter }"
+                        maxlength="100"
+                    >
+                    <button 
+                        type="button" 
+                        data-bind="click: addTask, enable: newTaskText().trim().length > 0"
+                        class="btn btn-primary"
+                    >
+                        ➕ Adicionar
+                    </button>
+                </div>
+            </section>
+
+            <!-- Seção de Estatísticas -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" data-bind="text: totalTasks"></span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-bind="text: completedTasks"></span>
+                        <span class="stat-label">Concluídas</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-bind="text: pendingTasks"></span>
+                        <span class="stat-label">Pendentes</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Filtros -->
+            <section class="filters-section">
+                <h2>Filtros</h2>
+                <div class="filter-buttons">
+                    <button 
+                        class="btn btn-filter" 
+                        data-bind="css: { active: currentFilter() === 'all' }, click: function() { currentFilter('all') }"
+                    >
+                        Todas
+                    </button>
+                    <button 
+                        class="btn btn-filter" 
+                        data-bind="css: { active: currentFilter() === 'pending' }, click: function() { currentFilter('pending') }"
+                    >
+                        Pendentes
+                    </button>
+                    <button 
+                        class="btn btn-filter" 
+                        data-bind="css: { active: currentFilter() === 'completed' }, click: function() { currentFilter('completed') }"
+                    >
+                        Concluídas
+                    </button>
+                </div>
+            </section>
+
+            <!-- Lista de Tarefas -->
+            <section class="tasks-section">
+                <h2>Lista de Tarefas</h2>
+                
+                <!-- Mensagem quando não há tarefas -->
+                <div class="empty-state" data-bind="visible: filteredTasks().length === 0">
+                    <p>Nenhuma tarefa encontrada.</p>
+                    <p data-bind="visible: tasks().length === 0">Adicione sua primeira tarefa acima! 🚀</p>
+                </div>
+
+                <!-- Lista de tarefas -->
+                <ul class="tasks-list" data-bind="foreach: filteredTasks">
+                    <li class="task-item">
+                        <div class="task-content">
+                            <!-- Checkbox para marcar como concluída -->
+                            <input 
+                                type="checkbox" 
+                                data-bind="checked: completed"
+                                class="task-checkbox"
+                            >
+                            <!-- Texto da tarefa -->
+                            <span 
+                                class="task-text" 
+                                data-bind="text: text, css: { completed: completed }"
+                            ></span>
+                            <!-- Data de criação -->
+                            <span class="task-date" data-bind="text: formattedDate"></span>
+                        </div>
+                        <!-- Botão de remover -->
+                        <button 
+                            class="btn btn-danger btn-small" 
+                            data-bind="click: $parent.removeTask"
+                            title="Remover tarefa"
+                        >
+                            🗑️
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Seção de Ações em Massa -->
+            <section class="bulk-actions" data-bind="visible: tasks().length > 0">
+                <h2>Ações em Massa</h2>
+                <div class="bulk-buttons">
+                    <button 
+                        class="btn btn-secondary" 
+                        data-bind="click: markAllCompleted, visible: pendingTasks() > 0"
+                    >
+                        ✅ Marcar Todas como Concluídas
+                    </button>
+                    <button 
+                        class="btn btn-secondary" 
+                        data-bind="click: markAllPending, visible: completedTasks() > 0"
+                    >
+                        🔄 Marcar Todas como Pendentes
+                    </button>
+                    <button 
+                        class="btn btn-danger" 
+                        data-bind="click: clearCompleted, visible: completedTasks() > 0"
+                    >
+                        🗑️ Limpar Concluídas
+                    </button>
+                    <button 
+                        class="btn btn-danger" 
+                        data-bind="click: clearAll"
+                    >
+                        🗑️ Limpar Todas
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Projeto demonstrativo do padrão <strong>MVVM</strong> com <strong>Knockout.js</strong></p>
+            <p>📚 Aprenda mais sobre: Model-View-ViewModel</p>
+        </footer>
+    </div>
+
+    <!-- Script da aplicação -->
+    <script src="app.js"></script>
+</body>
+</html> 
