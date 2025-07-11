@@ -3,27 +3,26 @@
 # Servidor web simples para arquivos estáticos
 # ========================================
 
-# Usar imagem base do Node.js Alpine (leve e segura)
-FROM node:18-alpine
+# Etapa 1: Build
+FROM node:20-alpine AS builder
 
-# Definir diretório de trabalho
 WORKDIR /app
 
-# Instalar servidor HTTP simples
-RUN npm install -g http-server
+COPY package.json vite.config.js ./
+COPY src ./src
+COPY index.html ./
 
-# Copiar arquivos da aplicação
-COPY index.html .
-COPY app.js .
-COPY src/model/Task.js ./src/model/Task.js
-COPY src/viewmodel/TodoViewModel.js ./src/viewmodel/TodoViewModel.js
-COPY src/view/style.css ./src/view/style.css
+RUN npm install
+RUN npm run build
 
-# Expor porta 8080
-EXPOSE 8080
+# Etapa 2: Servir arquivos estáticos
+FROM nginx:alpine
 
-# Comando para iniciar o servidor
-CMD ["http-server", "-p", "8080", "-a", "0.0.0.0", "--cors", "-c-1"]
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
 
 # ========================================
 # INSTRUÇÕES DE USO:

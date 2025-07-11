@@ -38,43 +38,47 @@ Este projeto demonstra como implementar o padrão **MVVM** usando **Knockout.js*
 
 ## 🚀 Como Executar
 
-### Opção 1: Docker Compose (Recomendado)
+### Opção 1: Vite (Desenvolvimento Local - Recomendado)
 
 ```bash
 # 1. Clonar ou baixar o projeto
 # 2. Navegar para o diretório
 cd knockout-mvvm-todo
 
-# 3. Executar com Docker Compose
-docker-compose up
+# 3. Instalar dependências
+npm install
+
+# 4. Executar com Vite
+npm run dev
+
+# 5. Acessar no navegador
+# http://localhost:3000
+```
+
+### Opção 2: Script de Gerenciamento
+
+```bash
+# Usar o script run.sh para facilitar o gerenciamento
+./run.sh vite           # Iniciar com Vite
+./run.sh vite-build     # Build para produção
+./run.sh start          # Iniciar com Docker
+./run.sh dev            # Modo desenvolvimento Docker
+```
+
+### Opção 3: Docker Compose (Produção)
+
+O Docker agora faz o build do projeto e serve os arquivos estáticos com Nginx:
+
+```bash
+# 1. Clonar ou baixar o projeto
+# 2. Navegar para o diretório
+cd knockout-mvvm-todo
+
+# 3. Build e subir o container
+# (O build do Vite é feito automaticamente no Dockerfile)
+docker-compose up --build
 
 # 4. Acessar no navegador
-# http://localhost:8080
-```
-
-### Opção 2: Docker Direto
-
-```bash
-# 1. Construir a imagem
-docker build -t knockout-mvvm-todo .
-
-# 2. Executar o container
-docker run -p 8080:8080 knockout-mvvm-todo
-
-# 3. Acessar no navegador
-# http://localhost:8080
-```
-
-### Opção 3: Servidor Local
-
-```bash
-# 1. Instalar http-server globalmente
-npm install -g http-server
-
-# 2. Executar o servidor
-http-server -p 8080
-
-# 3. Acessar no navegador
 # http://localhost:8080
 ```
 
@@ -84,6 +88,8 @@ http-server -p 8080
 knockout-mvvm-todo/
 ├── index.html                # View - Interface do usuário
 ├── app.js                   # Bootstrap - Inicialização Knockout
+├── package.json             # Dependências e scripts
+├── vite.config.js           # Configuração do Vite
 ├── src/
 │   ├── model/Task.js        # Model
 │   ├── viewmodel/TodoViewModel.js  # ViewModel
@@ -91,6 +97,7 @@ knockout-mvvm-todo/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── docker-compose.dev.yml
+├── run.sh                   # Script de gerenciamento
 └── README.md
 ```
 
@@ -171,8 +178,9 @@ window.Task          // Construtor do Model
 - **CSS3**: Estilos modernos e responsivos
 - **JavaScript ES6+**: Lógica da aplicação
 - **Knockout.js 3.5.1**: Framework MVVM (via unpkg CDN)
+- **Vite**: Build tool e servidor de desenvolvimento
 - **Docker**: Containerização
-- **http-server**: Servidor de desenvolvimento
+- **http-server**: Servidor de desenvolvimento (alternativo)
 
 ## 📖 Aprendizados
 

@@ -2,7 +2,7 @@
 
 # ========================================
 # 📝 Script de Gerenciamento - ToDo List Knockout.js
-# Comandos úteis para Docker e Docker Compose
+# Comandos úteis para Docker, Docker Compose e Vite
 # ========================================
 
 # Cores para output
@@ -69,10 +69,12 @@ show_help() {
     print_header "COMANDOS DISPONÍVEIS"
     echo ""
     echo -e "${CYAN}Iniciar aplicação:${NC}"
-    echo "  $0 start          - Iniciar em modo produção"
-    echo "  $0 dev            - Iniciar em modo desenvolvimento"
-    echo "  $0 start-bg       - Iniciar em background"
-    echo "  $0 dev-bg         - Iniciar dev em background"
+    echo "  $0 start          - Iniciar em modo produção (Docker)"
+    echo "  $0 dev            - Iniciar em modo desenvolvimento (Docker)"
+    echo "  $0 start-bg       - Iniciar em background (Docker)"
+    echo "  $0 dev-bg         - Iniciar dev em background (Docker)"
+    echo "  $0 vite           - Iniciar com Vite (desenvolvimento local)"
+    echo "  $0 vite-build     - Build para produção com Vite"
     echo ""
     echo -e "${CYAN}Gerenciar aplicação:${NC}"
     echo "  $0 stop           - Parar aplicação"
@@ -368,6 +370,65 @@ clean_all() {
     fi
 }
 
+# Função para iniciar com Vite
+start_vite() {
+    print_header "INICIANDO COM VITE"
+    
+    if [ ! -f "package.json" ]; then
+        print_error "package.json não encontrado!"
+        exit 1
+    fi
+    
+    if [ ! -f "vite.config.js" ]; then
+        print_error "vite.config.js não encontrado!"
+        exit 1
+    fi
+    
+    print_message "Verificando dependências..."
+    if [ ! -d "node_modules" ]; then
+        print_message "Instalando dependências..."
+        npm install
+    fi
+    
+    print_message "Iniciando servidor de desenvolvimento Vite..."
+    echo -e "${GREEN}Acesse: http://localhost:3000${NC}"
+    echo -e "${YELLOW}Alterações nos arquivos são refletidas automaticamente${NC}"
+    npm run dev
+}
+
+# Função para build com Vite
+build_vite() {
+    print_header "BUILD PARA PRODUÇÃO COM VITE"
+    
+    if [ ! -f "package.json" ]; then
+        print_error "package.json não encontrado!"
+        exit 1
+    fi
+    
+    if [ ! -f "vite.config.js" ]; then
+        print_error "vite.config.js não encontrado!"
+        exit 1
+    fi
+    
+    print_message "Verificando dependências..."
+    if [ ! -d "node_modules" ]; then
+        print_message "Instalando dependências..."
+        npm install
+    fi
+    
+    print_message "Construindo para produção..."
+    npm run build
+    
+    if [ $? -eq 0 ]; then
+        print_message "Build concluído com sucesso! ✓"
+        echo -e "${GREEN}Arquivos gerados em: ./dist${NC}"
+        echo -e "${YELLOW}Para testar: npm run preview${NC}"
+    else
+        print_error "Erro no build!"
+        exit 1
+    fi
+}
+
 # ========================================
 # SCRIPT PRINCIPAL
 # ========================================
@@ -422,6 +483,12 @@ case "$1" in
         ;;
     "clean-all")
         clean_all
+        ;;
+    "vite")
+        start_vite
+        ;;
+    "vite-build")
+        build_vite
         ;;
     "info")
         show_info

@@ -16,7 +16,7 @@ services:
     
     # Mapear porta 8080 do host para 8080 do container
     ports:
-      - "8080:8080"
+      - "8080:80"
     
     # Volumes para desenvolvimento (opcional)
     # Descomente as linhas abaixo se quiser fazer alterações em tempo real

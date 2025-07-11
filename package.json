@@ -1,0 +1,14 @@
+{
+  "name": "todo-knockout-mvvm",
+  "version": "1.0.0",
+  "description": "ToDo List com Knockout.js e padrão MVVM",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+} 
