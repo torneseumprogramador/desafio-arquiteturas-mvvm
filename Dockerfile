@@ -15,7 +15,9 @@ RUN npm install -g http-server
 # Copiar arquivos da aplicação
 COPY index.html .
 COPY app.js .
-COPY style.css .
+COPY src/model/Task.js ./src/model/Task.js
+COPY src/viewmodel/TodoViewModel.js ./src/viewmodel/TodoViewModel.js
+COPY src/view/style.css ./src/view/style.css
 
 # Expor porta 8080
 EXPOSE 8080

@@ -42,7 +42,7 @@ function Task(text, completed = false, createdAt = new Date()) {
  * ViewModel principal da aplicação
  * Gerencia o estado e a lógica de negócio
  */
-function TodoViewModel() {
+function TodoViewModel(Task) {
     const self = this;
     
     // ========================================
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎯 Iniciando aplicação Knockout.js MVVM...');
     
     // Criar instância do ViewModel
-    const todoViewModel = new TodoViewModel();
+    const todoViewModel = new TodoViewModel(Task);
     
     // Inicializar o ViewModel
     todoViewModel.init();
@@ -306,4 +306,8 @@ document.addEventListener('DOMContentLoaded', function() {
 if (typeof window !== 'undefined') {
     window.TodoViewModel = TodoViewModel;
     window.Task = Task;
-} 
+}
+
+// Importar Model e ViewModel
+import Task from './src/model/Task.js';
+import TodoViewModel from './src/viewmodel/TodoViewModel.js'; 
