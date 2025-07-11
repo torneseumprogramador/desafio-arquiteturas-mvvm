@@ -82,12 +82,16 @@ http-server -p 8080
 
 ```
 knockout-mvvm-todo/
-├── index.html          # View - Interface do usuário
-├── app.js             # ViewModel - Lógica de negócio
-├── style.css          # Estilos CSS responsivos
-├── Dockerfile         # Configuração do container Docker
-├── docker-compose.yml # Orquestração com Docker Compose
-└── README.md          # Documentação do projeto
+├── index.html                # View - Interface do usuário
+├── app.js                   # Bootstrap - Inicialização Knockout
+├── src/
+│   ├── model/Task.js        # Model
+│   ├── viewmodel/TodoViewModel.js  # ViewModel
+│   └── view/style.css       # Estilos (View)
+├── Dockerfile
+├── docker-compose.yml
+├── docker-compose.dev.yml
+└── README.md
 ```
 
 ## 🔧 Comandos Docker Úteis

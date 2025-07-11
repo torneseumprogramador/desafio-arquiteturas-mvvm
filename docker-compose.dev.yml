@@ -22,7 +22,9 @@ services:
     volumes:
       - ./index.html:/app/index.html
       - ./app.js:/app/app.js
-      - ./style.css:/app/style.css
+      - ./src/model/Task.js:/app/src/model/Task.js
+      - ./src/viewmodel/TodoViewModel.js:/app/src/viewmodel/TodoViewModel.js
+      - ./src/view/style.css:/app/src/view/style.css
     
     # Configurações de rede
     networks:

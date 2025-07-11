@@ -52,7 +52,7 @@ check_docker() {
 
 # Função para verificar se os arquivos necessários existem
 check_files() {
-    local required_files=("index.html" "app.js" "style.css" "Dockerfile" "docker-compose.yml")
+    local required_files=("index.html" "app.js" "src/view/style.css" "Dockerfile" "docker-compose.yml")
     
     for file in "${required_files[@]}"; do
         if [ ! -f "$file" ]; then
@@ -112,8 +112,10 @@ show_info() {
     echo ""
     echo -e "${CYAN}Arquivos principais:${NC}"
     echo "  - index.html (View)"
-    echo "  - app.js (ViewModel)"
-    echo "  - style.css (Estilos)"
+    echo "  - app.js (Bootstrap)"
+    echo "  - src/model/Task.js (Model)"
+    echo "  - src/viewmodel/TodoViewModel.js (ViewModel)"
+    echo "  - src/view/style.css (Estilos)"
     echo ""
     echo -e "${CYAN}Comandos úteis:${NC}"
     echo "  $0 start          # Iniciar aplicação"
@@ -413,7 +415,7 @@ case "$1" in
         ;;
     "rebuild")
         rebuild_image
-        start_app
+        start_dev
         ;;
     "clean")
         clean_containers

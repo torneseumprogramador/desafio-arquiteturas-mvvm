@@ -310,4 +310,21 @@ if (typeof window !== 'undefined') {
 
 // Importar Model e ViewModel
 import Task from './src/model/Task.js';
-import TodoViewModel from './src/viewmodel/TodoViewModel.js'; 
+import TodoViewModel from './src/viewmodel/TodoViewModel.js';
+import AddTask from './src/view/components/AddTask.js';
+import Stats from './src/view/components/Stats.js';
+import Filters from './src/view/components/Filters.js';
+import TaskList from './src/view/components/TaskList.js';
+import BulkActions from './src/view/components/BulkActions.js';
+
+ko.components.register('add-task', AddTask);
+ko.components.register('stats', Stats);
+ko.components.register('filters', Filters);
+ko.components.register('task-list', TaskList);
+ko.components.register('bulk-actions', BulkActions);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const todoViewModel = new TodoViewModel(Task);
+    todoViewModel.init();
+    ko.applyBindings(todoViewModel);
+}); 

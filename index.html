@@ -16,140 +16,20 @@
         </header>
 
         <main>
-            <!-- Seção de Adicionar Tarefa -->
-            <section class="add-task-section">
-                <h2>Adicionar Nova Tarefa</h2>
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="newTaskInput"
-                        placeholder="Digite sua tarefa aqui..."
-                        data-bind="value: newTaskText, event: { keyup: addTaskOnEnter }"
-                        maxlength="100"
-                    >
-                    <button 
-                        type="button" 
-                        data-bind="click: addTask, enable: newTaskText().trim().length > 0"
-                        class="btn btn-primary"
-                    >
-                        ➕ Adicionar
-                    </button>
-                </div>
-            </section>
+            <!-- Componente: Adicionar Nova Tarefa -->
+            <div data-bind="component: { name: 'add-task', params: { root: $root } }"></div>
 
-            <!-- Seção de Estatísticas -->
-            <section class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-number" data-bind="text: totalTasks"></span>
-                        <span class="stat-label">Total</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-bind="text: completedTasks"></span>
-                        <span class="stat-label">Concluídas</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-bind="text: pendingTasks"></span>
-                        <span class="stat-label">Pendentes</span>
-                    </div>
-                </div>
-            </section>
+            <!-- Componente: Estatísticas -->
+            <div data-bind="component: { name: 'stats', params: { root: $root } }"></div>
 
-            <!-- Seção de Filtros -->
-            <section class="filters-section">
-                <h2>Filtros</h2>
-                <div class="filter-buttons">
-                    <button 
-                        class="btn btn-filter" 
-                        data-bind="css: { active: currentFilter() === 'all' }, click: function() { currentFilter('all') }"
-                    >
-                        Todas
-                    </button>
-                    <button 
-                        class="btn btn-filter" 
-                        data-bind="css: { active: currentFilter() === 'pending' }, click: function() { currentFilter('pending') }"
-                    >
-                        Pendentes
-                    </button>
-                    <button 
-                        class="btn btn-filter" 
-                        data-bind="css: { active: currentFilter() === 'completed' }, click: function() { currentFilter('completed') }"
-                    >
-                        Concluídas
-                    </button>
-                </div>
-            </section>
+            <!-- Componente: Filtros -->
+            <div data-bind="component: { name: 'filters', params: { root: $root } }"></div>
 
-            <!-- Lista de Tarefas -->
-            <section class="tasks-section">
-                <h2>Lista de Tarefas</h2>
-                
-                <!-- Mensagem quando não há tarefas -->
-                <div class="empty-state" data-bind="visible: filteredTasks().length === 0">
-                    <p>Nenhuma tarefa encontrada.</p>
-                    <p data-bind="visible: tasks().length === 0">Adicione sua primeira tarefa acima! 🚀</p>
-                </div>
+            <!-- Componente: Lista de Tarefas -->
+            <div data-bind="component: { name: 'task-list', params: { root: $root } }"></div>
 
-                <!-- Lista de tarefas -->
-                <ul class="tasks-list" data-bind="foreach: filteredTasks">
-                    <li class="task-item">
-                        <div class="task-content">
-                            <!-- Checkbox para marcar como concluída -->
-                            <input 
-                                type="checkbox" 
-                                data-bind="checked: completed"
-                                class="task-checkbox"
-                            >
-                            <!-- Texto da tarefa -->
-                            <span 
-                                class="task-text" 
-                                data-bind="text: text, css: { completed: completed }"
-                            ></span>
-                            <!-- Data de criação -->
-                            <span class="task-date" data-bind="text: formattedDate"></span>
-                        </div>
-                        <!-- Botão de remover -->
-                        <button 
-                            class="btn btn-danger btn-small" 
-                            data-bind="click: $parent.removeTask"
-                            title="Remover tarefa"
-                        >
-                            🗑️
-                        </button>
-                    </li>
-                </ul>
-            </section>
-
-            <!-- Seção de Ações em Massa -->
-            <section class="bulk-actions" data-bind="visible: tasks().length > 0">
-                <h2>Ações em Massa</h2>
-                <div class="bulk-buttons">
-                    <button 
-                        class="btn btn-secondary" 
-                        data-bind="click: markAllCompleted, visible: pendingTasks() > 0"
-                    >
-                        ✅ Marcar Todas como Concluídas
-                    </button>
-                    <button 
-                        class="btn btn-secondary" 
-                        data-bind="click: markAllPending, visible: completedTasks() > 0"
-                    >
-                        🔄 Marcar Todas como Pendentes
-                    </button>
-                    <button 
-                        class="btn btn-danger" 
-                        data-bind="click: clearCompleted, visible: completedTasks() > 0"
-                    >
-                        🗑️ Limpar Concluídas
-                    </button>
-                    <button 
-                        class="btn btn-danger" 
-                        data-bind="click: clearAll"
-                    >
-                        🗑️ Limpar Todas
-                    </button>
-                </div>
-            </section>
+            <!-- Componente: Ações em Massa -->
+            <div data-bind="component: { name: 'bulk-actions', params: { root: $root } }"></div>
         </main>
 
         <footer>
@@ -159,6 +39,6 @@
     </div>
 
     <!-- Script da aplicação -->
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html> 
