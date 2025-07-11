@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY package.json vite.config.js ./
 COPY src ./src
-COPY index.html ./
+COPY app.js ./
 
 RUN npm install
 RUN npm run build
