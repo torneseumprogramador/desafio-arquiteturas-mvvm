@@ -1,73 +1,8 @@
-# ========================================
-# 📝 Docker Compose para ToDo List Knockout.js
-# Configuração simplificada para desenvolvimento
-# ========================================
-
-version: '3.8'
-
 services:
-  # Serviço principal da aplicação
-  todo-app:
-    # Construir a imagem a partir do Dockerfile local
+  web:
     build: .
-    
-    # Nome do container
-    container_name: knockout-mvvm-todo
-    
-    # Mapear porta 8080 do host para 8080 do container
     ports:
       - "8080:80"
-    
-    # Volumes para desenvolvimento (opcional)
-    # Descomente as linhas abaixo se quiser fazer alterações em tempo real
-    # volumes:
-    #   - ./index.html:/app/index.html
-    #   - ./app.js:/app/app.js
-    #   - ./style.css:/app/style.css
-    
-    # Configurações de rede
-    networks:
-      - todo-network
-    
-    # Configurações de restart
     restart: unless-stopped
-    
-    # Variáveis de ambiente (opcional)
-    environment:
-      - NODE_ENV=production
-    
-    # Configurações de recursos (opcional)
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 128M
 
-# Rede personalizada para o projeto
-networks:
-  todo-network:
-    driver: bridge
-    name: knockout-todo-network
-
-# ========================================
-# INSTRUÇÕES DE USO:
-# 
-# 1. Iniciar a aplicação:
-#    docker-compose up
-#
-# 2. Iniciar em background:
-#    docker-compose up -d
-#
-# 3. Parar a aplicação:
-#    docker-compose down
-#
-# 4. Reconstruir após mudanças:
-#    docker-compose up --build
-#
-# 5. Ver logs:
-#    docker-compose logs -f
-#
-# 6. Acessar a aplicação:
-#    http://localhost:8080
-# ======================================== 
+ 

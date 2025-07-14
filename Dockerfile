@@ -11,6 +11,7 @@ WORKDIR /app
 COPY package.json vite.config.js ./
 COPY src ./src
 COPY app.js ./
+COPY index.html ./
 
 RUN npm install
 RUN npm run build
