@@ -6,22 +6,29 @@ Um projeto demonstrativo completo implementando uma **ToDo List** usando **Knock
 
 Este projeto demonstra como implementar o padrão **MVVM** usando **Knockout.js**, criando uma aplicação web moderna e responsiva para gerenciamento de tarefas.
 
-## 🏗️ Arquitetura MVVM
+## 🏗️ Arquitetura MVVM + API
 
 ### 📋 Model (Modelo)
 - **`Task`**: Representa uma tarefa individual
-  - Propriedades: `text`, `completed`, `createdAt`
+  - Propriedades: `text`, `completed`, `createdAt`, `id`
   - Responsável pelos dados e sua estrutura
 
 ### 🎮 ViewModel
 - **`TodoViewModel`**: Gerencia a lógica de negócio e estado
-  - Observables: `tasks`, `newTaskText`, `currentFilter`
+  - Observables: `tasks`, `newTaskText`, `currentFilter`, `loading`, `error`
   - Computed Properties: `filteredTasks`, `totalTasks`, `completedTasks`, `pendingTasks`
-  - Métodos: `addTask()`, `removeTask()`, `markAllCompleted()`, etc.
+  - Métodos: `addTask()`, `removeTask()`, `toggleTask()`, `markAllCompleted()`, etc.
+  - Comunicação com API através do `ApiService`
 
 ### 🖥️ View (Visualização)
 - **HTML** com atributos `data-bind` do Knockout.js
 - Responsável pela apresentação e interação com o usuário
+- Indicadores de loading e erro
+
+### 🔗 API Backend
+- **Express.js** com MySQL
+- Rotas RESTful para CRUD de tarefas
+- Persistência em banco de dados MySQL
 
 ## ✨ Funcionalidades
 
@@ -31,7 +38,7 @@ Este projeto demonstra como implementar o padrão **MVVM** usando **Knockout.js*
 - ✅ **Filtros** (Todas, Pendentes, Concluídas)
 - ✅ **Estatísticas** em tempo real
 - ✅ **Ações em massa** (marcar todas, limpar concluídas)
-- ✅ **Persistência** no localStorage
+- ✅ **Persistência** no MySQL via API
 - ✅ **Design responsivo** e moderno
 - ✅ **Animações** suaves
 - ✅ **Tema escuro** automático
@@ -48,10 +55,14 @@ cd knockout-mvvm-todo
 # 3. Instalar dependências
 npm install
 
-# 4. Executar com Vite
+# 4. Configurar variáveis de ambiente (opcional)
+# Criar arquivo .env na raiz do projeto:
+# VITE_API_URL=http://localhost:3001
+
+# 5. Executar com Vite
 npm run dev
 
-# 5. Acessar no navegador
+# 6. Acessar no navegador
 # http://localhost:3000
 ```
 
@@ -74,13 +85,81 @@ O Docker agora faz o build do projeto e serve os arquivos estáticos com Nginx:
 # 2. Navegar para o diretório
 cd knockout-mvvm-todo
 
-# 3. Build e subir o container
-# (O build do Vite é feito automaticamente no Dockerfile)
+# 3. Configurar variáveis de ambiente (opcional)
+# Criar arquivo .env na raiz:
+# VITE_API_URL=http://localhost:3001
+# MYSQL_ROOT_PASSWORD=minha_senha_segura
+# MYSQL_PASSWORD=senha_do_banco
+
+# 4. Build e subir o container
 docker-compose up --build
 
-# 4. Acessar no navegador
+# 5. Acessar no navegador
 # http://localhost:8080
 ```
+
+## ⚙️ Configuração de Ambiente
+
+### Variáveis de Ambiente
+
+O projeto usa variáveis de ambiente para configuração. Todas têm valores padrão e são opcionais:
+
+#### Frontend (Vite)
+- `VITE_API_URL`: URL da API backend (padrão: `http://localhost:3001`)
+
+#### Backend (Node.js)
+- `DB_HOST`: Host do MySQL (padrão: `mysql`)
+- `DB_USER`: Usuário do MySQL (padrão: `todo_user`)
+- `DB_PASSWORD`: Senha do MySQL (padrão: `todo_password`)
+- `DB_NAME`: Nome do banco (padrão: `todo_db`)
+- `DB_PORT`: Porta do MySQL (padrão: `3306`)
+- `PORT`: Porta da API (padrão: `3001`)
+- `NODE_ENV`: Ambiente (development/production)
+
+#### MySQL
+- `MYSQL_ROOT_PASSWORD`: Senha root do MySQL (padrão: `root_password`)
+- `MYSQL_DATABASE`: Nome do banco (padrão: `todo_db`)
+- `MYSQL_USER`: Usuário do banco (padrão: `todo_user`)
+- `MYSQL_PASSWORD`: Senha do usuário (padrão: `todo_password`)
+
+### Arquivo .env (Opcional)
+
+Crie um arquivo `.env` na raiz do projeto para personalizar as configurações:
+
+```env
+# Frontend
+VITE_API_URL=http://localhost:3001
+
+# Backend
+DB_HOST=mysql
+DB_USER=todo_user
+DB_PASSWORD=minha_senha_segura
+DB_NAME=todo_db
+DB_PORT=3306
+PORT=3001
+NODE_ENV=production
+
+# MySQL
+MYSQL_ROOT_PASSWORD=root_senha_segura
+MYSQL_DATABASE=todo_db
+MYSQL_USER=todo_user
+MYSQL_PASSWORD=senha_do_banco
+```
+
+**Nota**: Se o arquivo `.env` não existir, o projeto usará os valores padrão.
+
+### ⚠️ Importante: Arquitetura SPA
+
+Este projeto usa uma **arquitetura SPA (Single Page Application)**:
+
+- **Frontend**: Aplicação Knockout.js compilada pelo Vite
+- **Backend**: API REST separada com Express + MySQL
+- **Comunicação**: HTTP direto do navegador para a API
+
+**Por isso:**
+- A URL da API deve ser acessível pelo navegador do cliente
+- Em produção, ambos (frontend e API) devem estar no mesmo domínio ou com CORS configurado
+- A URL `http://localhost:3001` não funciona porque o navegador não resolve esse hostname
 
 ## 📁 Estrutura do Projeto
 
@@ -88,15 +167,19 @@ docker-compose up --build
 knockout-mvvm-todo/
 ├── index.html                # View - Interface do usuário
 ├── app.js                   # Bootstrap - Inicialização Knockout
-├── package.json             # Dependências e scripts
+├── package.json             # Dependências e scripts (Frontend)
 ├── vite.config.js           # Configuração do Vite
 ├── src/
 │   ├── model/Task.js        # Model
 │   ├── viewmodel/TodoViewModel.js  # ViewModel
+│   ├── services/api.js      # Serviço de comunicação com API
 │   └── view/style.css       # Estilos (View)
-├── Dockerfile
-├── docker-compose.yml
-├── docker-compose.dev.yml
+├── backend/
+│   ├── package.json         # Dependências da API
+│   ├── server.js            # Servidor Express
+│   └── Dockerfile           # Dockerfile da API
+├── Dockerfile               # Dockerfile do Frontend
+├── docker-compose.yml       # Orquestração completa
 ├── run.sh                   # Script de gerenciamento
 └── README.md
 ```
@@ -116,8 +199,6 @@ docker-compose up --build
 # Ver logs
 docker-compose logs -f
 
-# Executar em modo de desenvolvimento (com volumes)
-docker-compose -f docker-compose.dev.yml up
 ```
 
 ## 🎨 Características do Design

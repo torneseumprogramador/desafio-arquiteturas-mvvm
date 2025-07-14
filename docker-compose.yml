@@ -1,8 +1,58 @@
 services:
-  web:
-    build: .
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: todo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-todo_db}
+      MYSQL_USER: ${MYSQL_USER:-todo_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-todo_password}
     ports:
-      - "8080:80"
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - todo-network
     restart: unless-stopped
 
- 
+  # API Backend
+  api:
+    build: ./backend
+    container_name: todo-api
+    environment:
+      DB_HOST: ${DB_HOST:-mysql}
+      DB_USER: ${DB_USER:-todo_user}
+      DB_PASSWORD: ${DB_PASSWORD:-todo_password}
+      DB_NAME: ${DB_NAME:-todo_db}
+      DB_PORT: ${DB_PORT:-3306}
+      PORT: ${PORT:-3001}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  # Frontend
+  web:
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3001}
+    container_name: todo-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  todo-network:
+    driver: bridge 

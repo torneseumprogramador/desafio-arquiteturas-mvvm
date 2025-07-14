@@ -33,23 +33,24 @@ ko.components.register('bulk-actions', BulkActions);
 // INICIALIZAÇÃO DA APLICAÇÃO
 // ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎯 Iniciando aplicação Knockout.js MVVM...');
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🎯 Iniciando aplicação Knockout.js MVVM com API...');
     
     // Criar instância do ViewModel
     const todoViewModel = new TodoViewModel(Task);
     
-    // Inicializar o ViewModel
-    todoViewModel.init();
-    
     // Aplicar o binding do Knockout
     ko.applyBindings(todoViewModel);
+    
+    // Inicializar o ViewModel (async)
+    await todoViewModel.init();
     
     console.log('✅ Aplicação iniciada com sucesso!');
     console.log('📚 Padrão MVVM implementado:');
     console.log('   - Model: Task (dados)');
     console.log('   - ViewModel: TodoViewModel (lógica)');
     console.log('   - View: HTML com data-bind (apresentação)');
+    console.log('🔗 API: Backend com MySQL');
 });
 
 // ========================================

@@ -70,9 +70,7 @@ show_help() {
     echo ""
     echo -e "${CYAN}Iniciar aplicação:${NC}"
     echo "  $0 start          - Iniciar em modo produção (Docker)"
-    echo "  $0 dev            - Iniciar em modo desenvolvimento (Docker)"
     echo "  $0 start-bg       - Iniciar em background (Docker)"
-    echo "  $0 dev-bg         - Iniciar dev em background (Docker)"
     echo "  $0 vite           - Iniciar com Vite (desenvolvimento local)"
     echo "  $0 vite-build     - Build para produção com Vite"
     echo ""
@@ -98,7 +96,6 @@ show_help() {
     echo ""
     echo -e "${YELLOW}Exemplos:${NC}"
     echo "  $0 start          # Iniciar aplicação"
-    echo "  $0 dev            # Modo desenvolvimento"
     echo "  $0 logs           # Ver logs"
     echo "  $0 stop           # Parar aplicação"
 }
@@ -121,7 +118,6 @@ show_info() {
     echo ""
     echo -e "${CYAN}Comandos úteis:${NC}"
     echo "  $0 start          # Iniciar aplicação"
-    echo "  $0 dev            # Modo desenvolvimento"
     echo "  $0 logs           # Ver logs"
     echo ""
     echo -e "${GREEN}Acesse: http://localhost:8080${NC}"
@@ -153,61 +149,6 @@ start_app_bg() {
         print_error "Erro ao iniciar aplicação!"
         exit 1
     fi
-}
-
-# Função para iniciar modo desenvolvimento
-start_dev() {
-    print_header "INICIANDO MODO DESENVOLVIMENTO"
-    check_docker
-    check_files
-    
-    if [ ! -f "docker-compose.dev.yml" ]; then
-        print_error "Arquivo docker-compose.dev.yml não encontrado!"
-        exit 1
-    fi
-    
-    print_message "Iniciando modo desenvolvimento com volumes..."
-    docker-compose -f docker-compose.dev.yml up
-}
-
-# Função para iniciar modo desenvolvimento em background
-start_dev_bg() {
-    print_header "INICIANDO MODO DESENVOLVIMENTO EM BACKGROUND"
-    check_docker
-    check_files
-    
-    if [ ! -f "docker-compose.dev.yml" ]; then
-        print_error "Arquivo docker-compose.dev.yml não encontrado!"
-        exit 1
-    fi
-    
-    print_message "Iniciando modo desenvolvimento em background..."
-    docker-compose -f docker-compose.dev.yml up -d
-    
-    if [ $? -eq 0 ]; then
-        print_message "Modo desenvolvimento iniciado com sucesso! ✓"
-        echo -e "${GREEN}Acesse: http://localhost:8080${NC}"
-        echo -e "${YELLOW}Alterações nos arquivos são refletidas automaticamente${NC}"
-    else
-        print_error "Erro ao iniciar modo desenvolvimento!"
-        exit 1
-    fi
-}
-
-# Função para parar aplicação
-stop_app() {
-    print_header "PARANDO APLICAÇÃO"
-    check_docker
-    
-    print_message "Parando containers..."
-    docker-compose down
-    
-    # Tentar parar também o modo desenvolvimento
-    if [ -f "docker-compose.dev.yml" ]; then
-        docker-compose -f docker-compose.dev.yml down
-    fi
-    
-    print_message "Aplicação parada com sucesso! ✓"
 }
 
 # Função para reiniciar aplicação
@@ -322,13 +263,8 @@ clean_containers() {
         print_message "Parando containers..."
         docker-compose down
         
-        if [ -f "docker-compose.dev.yml" ]; then
-            docker-compose -f docker-compose.dev.yml down
-        fi
-        
         print_message "Removendo imagens..."
         docker rmi knockout-mvvm-todo_todo-app 2>/dev/null || true
-        docker rmi knockout-mvvm-todo_todo-app-dev 2>/dev/null || true
         
         print_message "Limpeza concluída! ✓"
     else
@@ -350,7 +286,6 @@ clean_all() {
         
         # Parar containers do projeto
         docker-compose down 2>/dev/null || true
-        docker-compose -f docker-compose.dev.yml down 2>/dev/null || true
         
         # Remover containers parados
         docker container prune -f
@@ -447,12 +382,6 @@ case "$1" in
     "start-bg")
         start_app_bg
         ;;
-    "dev")
-        start_dev
-        ;;
-    "dev-bg")
-        start_dev_bg
-        ;;
     "stop")
         stop_app
         ;;
@@ -476,7 +405,6 @@ case "$1" in
         ;;
     "rebuild")
         rebuild_image
-        start_dev
         ;;
     "clean")
         clean_containers
@@ -502,4 +430,4 @@ case "$1" in
         show_help
         exit 1
         ;;
-esac 
+esac

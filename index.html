@@ -16,6 +16,20 @@
         </header>
 
         <main>
+            <!-- Indicador de Loading -->
+            <div class="loading-overlay" data-bind="visible: loading">
+                <div class="loading-spinner">⏳ Carregando...</div>
+            </div>
+
+            <!-- Indicador de Erro -->
+            <div class="error-message" data-bind="visible: error().length > 0">
+                <div class="error-content">
+                    <span class="error-icon">⚠️</span>
+                    <span data-bind="text: error"></span>
+                    <button class="error-close" data-bind="click: function() { error(''); }">×</button>
+                </div>
+            </div>
+
             <!-- Componente: Adicionar Nova Tarefa -->
             <div data-bind="component: { name: 'add-task', params: { root: $root } }"></div>
 

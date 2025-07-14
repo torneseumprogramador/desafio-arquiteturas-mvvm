@@ -12,7 +12,7 @@ export default {
         <ul class="tasks-list" data-bind="foreach: filteredTasks">
             <li class="task-item">
                 <div class="task-content">
-                    <input type="checkbox" data-bind="checked: completed" class="task-checkbox">
+                    <input type="checkbox" data-bind="checked: completed, click: $parent.toggleTask" class="task-checkbox">
                     <span class="task-text" data-bind="text: text, css: { completed: completed }"></span>
                     <span class="task-date" data-bind="text: formattedDate"></span>
                 </div>
